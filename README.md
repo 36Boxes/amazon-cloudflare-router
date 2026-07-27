@@ -49,10 +49,13 @@ USAGE.md    Day-to-day usage
 - Python 3.9+ for the CLI
 - Node.js 18+ (only for `wrangler` deploy)
 
-## Companion repos
+## How it plugs into Cloudflare
 
-Pairs cleanly with your existing
-[`cloudflare-subdomain-adder`](../cloudflare-subdomain-adder/) which
-provisions the Email Routing DNS records for subdomains. This project uses
-address-level routing rules and does **not** replace your existing catch-all
-Worker.
+This Worker is designed to sit behind an Email Routing **catch-all** on
+whatever domain you receive Amazon emails on. The catch-all points at
+this Worker; the Worker forwards everything to your master Gmail as
+normal, and intercepts only the Amazon "arriving today / out for
+delivery" emails to re-route them to the tagged destination inbox.
+
+If you don't yet have that catch-all in place, SETUP.md §7 walks you
+through pointing it at the Worker.

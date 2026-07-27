@@ -32,8 +32,7 @@ Authenticate wrangler once:
 npx wrangler login
 ```
 
-Or set `CLOUDFLARE_API_TOKEN` in your shell environment (matches your
-`cloudflare-subdomain-adder` repo convention).
+Or set `CLOUDFLARE_API_TOKEN` in your shell environment.
 
 ## 2. Create the D1 database
 
@@ -109,10 +108,9 @@ outbound-from). You'll verify it in step 6.
 npx wrangler deploy
 ```
 
-Worker name: `request-email-filter` — same name as your existing Worker, so
-this deployment **overwrites** it in place. Because every zone's catch-all
-already points to `request-email-filter`, no routing rules need to change.
-Note the workers.dev URL from the output — you'll need it in step 8.
+Worker name: `request-email-filter` (from `wrangler.toml`). First deploy
+creates it; subsequent deploys update in place. Note the workers.dev URL
+from the output — you'll need it in step 8.
 
 ## 6. Verify destination addresses
 
@@ -140,22 +138,34 @@ Each address gets a verification email — click the link once, done.
   `<yourdomain>` already has a catch-all pointing at the Worker (or at
   Gmail), no extra setup is needed. The catch-all rule catches it.
 
-## 7. Add routing rules (probably nothing to do)
+## 7. Point your catch-all at this Worker
 
-Because this Worker is a **drop-in replacement** for your existing
-`request-email-filter` script, every zone's catch-all rule already routes
-to it. The step-5 deploy overwrote the script; the routing rules are
-unchanged and still point to the same Worker name.
+The Worker only sees an email if Email Routing sends it there. The
+recommended pattern is a **catch-all rule that routes to this Worker**
+on whatever domain you'll use for Amazon (e.g. the domain that owns
+`amazon@yourdomain.com`).
 
-**Nothing to do at Cloudflare in this step** unless:
+The Worker is a superset of a plain "forward to Gmail" catch-all: it
+forwards **every** email to `MASTER_EMAIL` unchanged, and only diverges
+for Amazon delivery notifications, which it additionally forwards to the
+tagged destination inbox.
 
-- You want to add a specific `amazon@yourdomain.com` rule so it's obvious
-  in the dashboard which address you registered on Amazon. Optional and
-  cosmetic — the catch-all handles it anyway.
-- You have a zone that *doesn't* have Email Routing enabled and you want
-  to include it. Run `python cloudflare-subdomain-adder/add_cf_subdomains.py`
-  and `set_email_worker_catchall.py --worker request-email-filter --apply`
-  to enable and point it.
+In the Cloudflare dashboard for your zone → **Email → Routing → Routes**:
+
+1. Under **Catch-all address**, click **Edit**.
+2. Set the action to **Send to a Worker** → `request-email-filter`.
+3. Save. The catch-all is now the Worker.
+
+If you'd rather keep your existing catch-all pointing at Gmail and only
+funnel Amazon through the Worker, add a **specific address** rule
+instead:
+
+- Address: `amazon@yourdomain.com` (or whichever address you register on
+  Amazon)
+- Action: **Send to a Worker** → `request-email-filter`
+
+Either pattern works — the Worker doesn't care how the email arrived.
+Catch-all is simpler; specific-address is more surgical.
 
 ## 8. Configure the CLI
 
@@ -261,5 +271,6 @@ npx wrangler delete request-email-filter
 npx wrangler d1 delete amazon-destination-forwarder
 ```
 
-And delete the two routing rules from step 7. Your master Gmail continues to
-receive Amazon emails as before — nothing else was changed.
+And in Cloudflare Email Routing, revert your catch-all (or delete the
+`amazon@yourdomain.com` rule) from step 7 so email flows straight to
+Gmail again. Nothing else on your account was changed.
