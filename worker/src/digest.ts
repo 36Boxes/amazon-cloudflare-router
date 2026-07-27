@@ -303,7 +303,7 @@ a{color:inherit}
   if (untagged.length > 0) {
     parts.push(`<div class="section">
   <div class="section-head">
-    <div class="title warn">⚠ Needs a destination</div>
+    <div class="title warn">⚠ Untagged (Going to my house)</div>
     <span class="count">${untagged.length}</span>
   </div>`);
     for (const o of untagged) {
