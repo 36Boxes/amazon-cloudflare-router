@@ -2,6 +2,10 @@
 .env
 .dev.vars
 
+# Real Cloudflare Worker config (has secrets and real IDs).
+# Ship worker/wrangler.toml.example instead — copy and fill in.
+worker/wrangler.toml
+
 # Virtual environment
 .venv/
 venv/

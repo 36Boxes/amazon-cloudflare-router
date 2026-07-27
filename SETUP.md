@@ -80,7 +80,15 @@ Save `ADMIN_TOKEN` — the CLI needs it in step 8.
 
 ## 4. Set vars
 
-Edit `worker/wrangler.toml` under `[vars]`:
+`worker/wrangler.toml` is gitignored (it holds your real domain + D1
+database ID). Start from the tracked template:
+
+```powershell
+cd worker
+Copy-Item wrangler.toml.example wrangler.toml
+```
+
+Then edit `worker/wrangler.toml` under `[vars]`:
 
 ```toml
 [vars]
