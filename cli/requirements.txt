@@ -1,0 +1,3 @@
+# requests>=2.31.0 already covers the whole CLI — matches the version
+# used by ../cloudflare-subdomain-adder for consistency.
+requests>=2.31.0

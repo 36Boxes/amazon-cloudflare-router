@@ -1,0 +1,24 @@
+{
+  "name": "request-email-filter",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "deploy": "wrangler deploy",
+    "dev": "wrangler dev",
+    "tail": "wrangler tail --format=pretty",
+    "db:migrate:local":  "wrangler d1 migrations apply amazon-destination-forwarder --local",
+    "db:migrate:remote": "wrangler d1 migrations apply amazon-destination-forwarder --remote",
+    "db:list:local":     "wrangler d1 migrations list amazon-destination-forwarder --local",
+    "db:list:remote":    "wrangler d1 migrations list amazon-destination-forwarder --remote",
+    "typecheck": "tsc --noEmit"
+  },
+  "devDependencies": {
+    "@cloudflare/workers-types": "^4.20241127.0",
+    "typescript": "^5.6.3",
+    "wrangler": "^3.90.0"
+  },
+  "dependencies": {
+    "postal-mime": "^2.4.3"
+  }
+}

@@ -1,0 +1,38 @@
+name = "request-email-filter"
+main = "src/index.ts"
+compatibility_date = "2024-11-06"
+compatibility_flags = ["nodejs_compat"]
+
+# Set these to real values before deploying.
+[vars]
+MASTER_EMAIL     = "you@gmail.com"
+UNROUTED_EMAIL   = "unrouted@your-domain.example"
+FROM_ADDRESS     = "digest@your-domain.example"
+DIGEST_TIMEZONE  = "Europe/London"
+RETENTION_DAYS   = "90"
+# Set after first deploy to the workers.dev or custom URL:
+WORKER_BASE_URL  = "https://request-email-filter.<your-subdomain>.workers.dev"
+
+# D1: fill in database_id after `npx wrangler d1 create amazon-destination-forwarder`
+[[d1_databases]]
+binding        = "DB"
+database_name  = "amazon-destination-forwarder"
+database_id    = "<paste-database-id-here>"
+migrations_dir = "migrations"
+
+# Outbound email (digest). MASTER_EMAIL must be verified in Cloudflare
+# Email Routing → Destination Addresses before send_email will work.
+[[send_email]]
+name = "EMAIL"
+# Optional lock-down: uncomment to restrict outbound to your master Gmail only.
+# allowed_destination_addresses = ["you@gmail.com"]
+
+# Daily digest at 09:00 UTC. Set to your local time by adjusting the cron
+# expression, or leave in UTC and let DIGEST_TIMEZONE do date-label
+# formatting.
+[triggers]
+crons = ["0 9 * * *"]
+
+# Secrets (set separately, NOT in this file):
+#   npx wrangler secret put ADMIN_TOKEN
+#   npx wrangler secret put HMAC_SECRET

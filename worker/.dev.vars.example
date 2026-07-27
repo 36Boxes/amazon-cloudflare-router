@@ -1,0 +1,8 @@
+# Local dev secrets for `wrangler dev`. Copy to `.dev.vars` and fill in.
+# `.dev.vars` is gitignored.
+#
+# In production these are set as Worker secrets via:
+#   npx wrangler secret put ADMIN_TOKEN
+#   npx wrangler secret put HMAC_SECRET
+ADMIN_TOKEN = "generate-a-long-random-string"
+HMAC_SECRET = "generate-a-separate-long-random-string"

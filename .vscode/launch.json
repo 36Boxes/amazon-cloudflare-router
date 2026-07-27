@@ -1,0 +1,49 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "orders: status",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/cli/orders.py",
+      "args": ["status"],
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/cli/.env"
+    },
+    {
+      "name": "orders: dest list",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/cli/orders.py",
+      "args": ["dest", "list"],
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/cli/.env"
+    },
+    {
+      "name": "orders: untagged",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/cli/orders.py",
+      "args": ["untagged"],
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/cli/.env"
+    },
+    {
+      "name": "orders: review (trigger digest)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/cli/orders.py",
+      "args": ["review"],
+      "console": "integratedTerminal",
+      "envFile": "${workspaceFolder}/cli/.env"
+    },
+    {
+      "name": "orders: init (first-time config)",
+      "type": "debugpy",
+      "request": "launch",
+      "program": "${workspaceFolder}/cli/orders.py",
+      "args": ["init"],
+      "console": "integratedTerminal"
+    }
+  ]
+}
